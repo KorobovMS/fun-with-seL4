@@ -1,4 +1,8 @@
 cmake_minimum_required(VERSION 3.7.2)
 project(FunWithSel4 C)
+enable_language(C)
+enable_language(CXX)
+enable_language(ASM)
 add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/seL4" kernel)
 add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/seL4/libsel4" libsel4)
+add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/sel4runtime" sel4runtime)

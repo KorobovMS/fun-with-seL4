@@ -13,18 +13,15 @@ After cloning this repository submodules should be also cloned:
 ```
 mkdir build
 cd build
-cmake -DCROSS_COMPILER_PREFIX= -DCMAKE_TOOLCHAIN_FILE=../seL4/gcc.cmake -G Ninja -C ../configs/cfg.cmake ..
+cmake -DCROSS_COMPILER_PREFIX= -DCMAKE_TOOLCHAIN_FILE=../seL4/gcc.cmake -DCMAKE_C_FLAGS=-fno-stack-protector -G Ninja -C ../configs/cfg.cmake ..
 ninja kernel.elf
 ninja libsel4.a
+ninja sel4runtime
 python -c "with open('./kernel/kernel.elf', 'r+b') as f: f.seek(18); f.write(b'\x03');"
+gcc -c ../projects/main.c -o main.o -fno-stack-protector
+ld sel4runtime/libsel4runtime.a main.o libsel4/libsel4.a -e _sel4_start -o rootserver
 ```
 
 # How to launch
 
-`qemu-system-x86_64 -enable-kvm -cpu host -m 50M -kernel kernel/kernel.elf -serial stdio`
-
-# Makefile
-
-There is also a Makefile to shorten things a little bit.
-
-Use `make kernel` to build kernel and use `make launch` to launch Qemu.
+`qemu-system-x86_64 -enable-kvm -cpu host -m 50M -kernel kernel/kernel.elf -initrd ./rootserver -serial stdio`
