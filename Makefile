@@ -8,7 +8,7 @@ kernel:
 	mkdir build
 	cd build && cmake -DCROSS_COMPILER_PREFIX= -DCMAKE_TOOLCHAIN_FILE=../seL4/gcc.cmake -G Ninja -C ../configs/kernel_cfg.cmake ../seL4/
 	cd build && ninja kernel.elf
-	objcopy -I elf64-x86-64 -O elf32-i386 ./build/kernel.elf ./build/32.elf
+	python -c "with open('./build/kernel.elf', 'r+b') as f: f.seek(18); f.write(b'\x03');"
 
 launch:
-	qemu-system-x86_64 -enable-kvm -cpu host -m 50M -kernel ./build/32.elf -serial stdio
+	qemu-system-x86_64 -enable-kvm -cpu host -m 50M -kernel ./build/kernel.elf -serial stdio

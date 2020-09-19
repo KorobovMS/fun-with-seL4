@@ -15,12 +15,12 @@ mkdir build
 cd build
 cmake -DCROSS_COMPILER_PREFIX= -DCMAKE_TOOLCHAIN_FILE=../seL4/gcc.cmake -G Ninja -C ../configs/kernel_cfg.cmake ../seL4/
 ninja kernel.elf
-objcopy -I elf64-x86-64 -O elf32-i386 kernel.elf 32.elf
+python -c "with open('./kernel.elf', 'r+b') as f: f.seek(18); f.write(b'\x03');"
 ```
 
 # How to launch
 
-`qemu-system-x86_64 -enable-kvm -cpu host -m 50M -kernel 32.elf -serial stdio`
+`qemu-system-x86_64 -enable-kvm -cpu host -m 50M -kernel kernel.elf -serial stdio`
 
 # Makefile
 
