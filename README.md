@@ -13,14 +13,15 @@ After cloning this repository submodules should be also cloned:
 ```
 mkdir build
 cd build
-cmake -DCROSS_COMPILER_PREFIX= -DCMAKE_TOOLCHAIN_FILE=../seL4/gcc.cmake -G Ninja -C ../configs/kernel_cfg.cmake ../seL4/
+cmake -DCROSS_COMPILER_PREFIX= -DCMAKE_TOOLCHAIN_FILE=../seL4/gcc.cmake -G Ninja -C ../configs/cfg.cmake ..
 ninja kernel.elf
-python -c "with open('./kernel.elf', 'r+b') as f: f.seek(18); f.write(b'\x03');"
+ninja libsel4.a
+python -c "with open('./kernel/kernel.elf', 'r+b') as f: f.seek(18); f.write(b'\x03');"
 ```
 
 # How to launch
 
-`qemu-system-x86_64 -enable-kvm -cpu host -m 50M -kernel kernel.elf -serial stdio`
+`qemu-system-x86_64 -enable-kvm -cpu host -m 50M -kernel kernel/kernel.elf -serial stdio`
 
 # Makefile
 
