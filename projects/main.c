@@ -47,7 +47,6 @@ void print(const char *str)
 {
 	const char *p = str;
 	while (*p) {
-		char x = *p;
 		seL4_DebugPutChar(*p);
 		++p;
 	}
