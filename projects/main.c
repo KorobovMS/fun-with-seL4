@@ -20,7 +20,7 @@ void __stack_chk_fail()
 	seL4_DebugPutChar('c');
 	seL4_DebugPutChar('f');
 	seL4_DebugPutChar('\n');
-	while(1);
+	while (1);
 }
 
 void __assert_fail(const char * assertion, const char * file, unsigned int line, const char * function)
@@ -28,13 +28,13 @@ void __assert_fail(const char * assertion, const char * file, unsigned int line,
 	seL4_DebugPutChar('a');
 	seL4_DebugPutChar('f');
 	seL4_DebugPutChar('\n');
-	while(1);
+	while (1);
 }
 
 char *strcpy(char *strDest, const char *strSrc)
 {
     char *temp = strDest;
-    while(*strDest++ = *strSrc++);
+    while (*strDest++ = *strSrc++);
     return temp;
 }
 
@@ -55,6 +55,6 @@ void print(const char *str)
 int main(int argc, char **argv)
 {
 	print("Hello, world!\n");
-	while(1);
+	while (1);
 	return 0;
 }
