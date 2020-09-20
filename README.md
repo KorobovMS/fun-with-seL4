@@ -17,7 +17,7 @@ cmake -DCROSS_COMPILER_PREFIX= -DCMAKE_TOOLCHAIN_FILE=../seL4/gcc.cmake -DCMAKE_
 ninja kernel.elf
 ninja libsel4.a
 ninja sel4runtime
-python -c "with open('./kernel/kernel.elf', 'r+b') as f: f.seek(18); f.write(b'\x03');"
+python -c "with open('./kernel/kernel.elf', 'r+b') as f: f.seek(18); f.write(int(3).to_bytes(2, 'little'));"
 gcc -c ../projects/main.c -o main.o -fno-stack-protector
 ld sel4runtime/libsel4runtime.a main.o libsel4/libsel4.a -e _sel4_start -o rootserver
 ```
