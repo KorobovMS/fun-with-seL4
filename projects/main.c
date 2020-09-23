@@ -1,4 +1,4 @@
-void seL4_DebugPutChar(char c);
+#include <sel4/sel4.h>
 
 // This is a kludge to avoid crash while CRT is initializing and
 // is calling ELF constructors.
@@ -23,7 +23,7 @@ void __stack_chk_fail()
 	while (1);
 }
 
-void __assert_fail(const char * assertion, const char * file, unsigned int line, const char * function)
+void __assert_fail(const char * assertion, const char * file, int line, const char * function)
 {
 	seL4_DebugPutChar('a');
 	seL4_DebugPutChar('f');
