@@ -1,7 +1,7 @@
 set(KernelPlatform "pc99" CACHE STRING "")
 set(KernelSel4Arch "x86_64" CACHE STRING "")
 set(KernelVerificationBuild OFF CACHE BOOL "")
-set(KernelMaxNumNodes "1" CACHE STRING "")
+set(KernelMaxNumNodes "2" CACHE STRING "")
 set(KernelOptimisation "-O0" CACHE STRING "")
 set(KernelRetypeFanOutLimit "256" CACHE STRING "")
 set(KernelBenchmarks "none" CACHE STRING "")
