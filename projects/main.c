@@ -144,12 +144,32 @@ void thread1_proc()
 unsigned char thread2_stack[0x1000];
 unsigned char thread2_ipc_buffer[32];
 
+void print_vga(char c, char fg, char bg, int x, int y)
+{
+	seL4_Word vga_vaddr = 0x4f0000;
+	unsigned char *pos = (unsigned char *)vga_vaddr + 2*(x*80 + y);
+	*pos = c;
+	*(pos + 1) = (bg << 4) | fg;
+}
+
+void clear_screen()
+{
+	for (int x = 0; x < 25; ++x) {
+		for (int y = 0; y < 80; ++y) {
+			print_vga(' ', 0, 0, x, y);
+		}
+	}
+}
+
 void thread2_proc()
 {
-	print("hello from thread #2\n");
-	while (1) {
-		seL4_Yield();
-	}
+	char str[] = "rainbow";
+	char fgs[] = { 15, 15, 0, 0, 0, 15, 15 };
+	char bgs[] = { 4, 6, 14, 2, 11, 1, 5 };
+	clear_screen();
+	for (int i = 0; i < sizeof(str) - 1; ++i)
+		print_vga(str[i], fgs[i], bgs[i], 0, i);
+	while (1);
 }
 
 void print_system_info(seL4_BootInfo *bootinfo)
@@ -190,6 +210,10 @@ int main(int argc, char **argv)
 	seL4_BootInfo *bootinfo = sel4runtime_bootinfo();
 	seL4_Word thread1 = bootinfo->untyped.end;
 	seL4_Word thread2 = bootinfo->untyped.end + 1;
+	seL4_Word first_pages_caps = bootinfo->untyped.end + 2;
+	seL4_Word vga_page_cap = first_pages_caps + 0xb8000 / 0x1000;
+	seL4_Word vga_vaddr = 0x4f0000;
+
 	if (seL4_Untyped_Retype(
 			bootinfo->untyped.end - 1,
 			seL4_TCBObject,
@@ -200,6 +224,24 @@ int main(int argc, char **argv)
 			bootinfo->untyped.end,
 			2))
 		panic("cannot retype\n");
+
+	if (seL4_Untyped_Retype(
+			bootinfo->untyped.start,
+			seL4_X86_4K,
+			seL4_PageBits,
+			seL4_CapInitThreadCNode,
+			0,
+			0,
+			first_pages_caps,
+			256))
+		panic("cannot retype memory\n");
+	if (seL4_X86_Page_Map(
+			vga_page_cap,
+			seL4_CapInitThreadVSpace,
+			vga_vaddr,
+			seL4_CapRights_new(0, 0, 1, 1),
+			seL4_X86_Default_VMAttributes))
+		panic("cannot map\n");
 
 	print_system_info(bootinfo);
 
