@@ -18,6 +18,9 @@ ninja kernel.elf
 ninja libsel4.a
 ninja sel4runtime
 python -c "with open('./kernel/kernel.elf', 'r+b') as f: f.seek(18); f.write(int(3).to_bytes(2, 'little'));"
+as ../sel4runtime/crt/sel4_arch/x86_64/crt0.S -o crt0.o
+as ../sel4runtime/crt/sel4_arch/x86_64/crti.S -o crti.o
+as ../sel4runtime/crt/sel4_arch/x86_64/crtn.S -o crtn.o
 gcc -c ../projects/main.c -o main.o -fno-stack-protector \
 	-I ../seL4/libsel4/include/ \
 	-I ../seL4/libsel4/arch_include/x86 \
@@ -30,7 +33,7 @@ gcc -c ../projects/main.c -o main.o -fno-stack-protector \
 	-I ./libsel4/include/ \
 	-I ./libsel4/arch_include/x86/ \
 	-I ./libsel4/sel4_arch_include/x86_64/
-ld sel4runtime/libsel4runtime.a main.o libsel4/libsel4.a -e _sel4_start -o rootserver
+ld crt0.o crti.o main.o crtn.o sel4runtime/libsel4runtime.a libsel4/libsel4.a -e _sel4_start -o rootserver
 ```
 
 # How to launch

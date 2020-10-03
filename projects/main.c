@@ -2,18 +2,6 @@
 
 seL4_BootInfo *sel4runtime_bootinfo(void);
 
-// This is a kludge to avoid crash while CRT is initializing and
-// is calling ELF constructors.
-// sel4runtime provides _init function and the only thing it does
-// is opening a stack frame. It doesn't 'ret', but this function is 'call'ed.
-// This needs some futher exploration on how gcc/ld work.
-// Right now main.o must be after libsel4runtime.a in ld arguments list.
-__attribute__ ((section (".init")))
-void init()
-{
-	asm volatile("pop %rbp\n");
-}
-
 // __stack_chk_fail, __assert_fail and strcpy are implemented here
 // so there is not need in linking with libc library.
 void __stack_chk_fail()
