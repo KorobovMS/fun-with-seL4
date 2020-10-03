@@ -124,9 +124,7 @@ unsigned char thread1_ipc_buffer[32];
 void thread1_proc()
 {
 	print("hello from thread #1\n");
-	while (1) {
-		seL4_Yield();
-	}
+	while (1);
 }
 
 unsigned char thread2_stack[0x1000];
@@ -292,8 +290,6 @@ int main(int argc, char **argv)
 			1))
 		panic("cannot set affinity 2\n");
 
-	seL4_DebugDumpScheduler();
-
 	if (seL4_TCB_Resume(thread1))
 		panic("cannot resume 1\n");
 	if (seL4_TCB_Resume(thread2))
@@ -301,10 +297,6 @@ int main(int argc, char **argv)
 
 	print("hello from rootserver thread\n");
 
-	seL4_DebugDumpScheduler();
-
-	while (1) {
-		seL4_Yield();
-	}
+	while (1);
 	return 0;
 }
