@@ -289,7 +289,7 @@ int main(int argc, char **argv)
 		panic("cannot set affinity 1\n");
 	if (seL4_TCB_SetAffinity(
 			thread2,
-			0))
+			1))
 		panic("cannot set affinity 2\n");
 
 	seL4_DebugDumpScheduler();

@@ -38,4 +38,4 @@ ld crt0.o crti.o main.o crtn.o sel4runtime/libsel4runtime.a libsel4/libsel4.a -e
 
 # How to launch
 
-`qemu-system-x86_64 -enable-kvm -cpu host -m 50M -kernel kernel/kernel.elf -initrd ./rootserver -serial stdio`
+`qemu-system-x86_64 -enable-kvm -cpu host -m 50M -kernel kernel/kernel.elf -initrd ./rootserver -serial stdio -smp 2`
